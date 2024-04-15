@@ -1,8 +1,24 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
+interface Todo {
+  todo: string;
+  checked: boolean;
+}
+
 export default function App() {
-  const [todos, setTodos] = useState<string[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const createTodo = (event: FormEvent): void => {
     event.preventDefault();
@@ -10,8 +26,14 @@ export default function App() {
     const input = target[0] as HTMLInputElement;
     const trimmedValue = input.value.trim();
     if (!trimmedValue) return;
-    setTodos([...todos, trimmedValue]);
+    setTodos([...todos, { todo: `- ${trimmedValue}`, checked: false }]);
     target.reset();
+  };
+
+  const toggleTodo = (index: number): void => {
+    const newTodos = [...todos];
+    newTodos[index].checked = !newTodos[index].checked;
+    setTodos(newTodos);
   };
 
   const deleteTodo = (todoIndex: number): void => {
@@ -41,9 +63,14 @@ export default function App() {
         </form>
         {todos.length > 0 ? (
           <ul className='todos'>
-            {todos.map((todo, index) => (
+            {todos.map(({ todo, checked }, index) => (
               <li key={index}>
-                <p>{todo}</p>
+                <p
+                  onClick={() => toggleTodo(index)}
+                  style={{ textDecoration: checked ? 'line-through' : 'none' }}
+                >
+                  {todo}
+                </p>
                 <FaTrash
                   className='delete-icon'
                   onClick={() => deleteTodo(index)}
