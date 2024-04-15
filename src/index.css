@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 5rem 1rem;
+  background: url('./assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.title {
+  color: white;
+}
+
+.todo-container {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo-form {
+  display: flex;
+}
+
+.todo-input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 0.5rem 1rem;
+  flex: 1;
+}
+
+.todo-button {
+  border: 1px solid #ccc;
+  border-radius: 0 4px 4px 0;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  user-select: none;
+}
+
+.todos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todos li {
+  display: flex;
+  background-color: #f0f0f0;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-height: 3rem;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+}
+
+.todos li p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80vw;
+}
+
+.delete-icon {
+  cursor: pointer;
+  height: 100%;
+  user-select: none;
+}
+
+.feedback {
+  margin-top: 1rem;
+  text-align: center;
+  color: white;
+}
