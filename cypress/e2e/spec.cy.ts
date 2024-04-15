@@ -19,7 +19,6 @@ describe('Todo list', () => {
       'Ficar rico e fugir para uma ilha deserta',
     ];
     
-    // Adiciona tarefas
     cy.get('.todo-input').type(' ');
     const todoButton = cy.get('.todo-button');
     todoButton.click();
@@ -33,17 +32,30 @@ describe('Todo list', () => {
       todoInput.should('have.value', '');
     });
 
-    // Verifica se as tarefas foram adicionadas corretamente
     cy.get('.todos li').should('have.length', tasks.length);
     tasks.forEach((task, index) => {
-      cy.get('.todos li p').eq(index).should('have.text', task);
+      cy.get('.todos li p').eq(index).should('have.text', `- ${task}`);
     });
 
-    // Remove tarefas
     cy.get('.delete-icon').eq(4).click();
     cy.get('.delete-icon').eq(3).click();
 
-    // Verifica se as tarefas foram removidas corretamente
     cy.get('.todos li').should('have.length', tasks.length - 2);
+  });
+
+  it('Deve manter as tarefas no localStorage após recarregar a página', () => {
+    cy.visit('/');
+    cy.get('.todo-input').type('Minha nova tarefa');
+    cy.get('.todo-button').click();
+    cy.reload();
+
+    cy.window().then((window) => {
+      const todos = window.localStorage.getItem('todos');
+      expect(todos).to.exist;
+      expect(todos).to.contain('Minha nova tarefa');
+    });
+
+    cy.get('.todos li').should('have.length', 1);
+    cy.get('.todos li p').should('have.text', '- Minha nova tarefa');
   });
 });
